@@ -1,7 +1,11 @@
 # SJTUThesis 示例模板个人修改个人用
  [个人修改个人用](chat_2024_03_16_19_16_40.md)
+## TODO:
+- [ ] 正文字体
+- [ ] 页眉居中
+- [ ] 文献引用测试
 
-## 软件许可证
+### 软件许可证
 [![Build Status](https://github.com/sjtug/SJTUThesis/actions/workflows/build.yml/badge.svg)](https://github.com/sjtug/SJTUThesis/actions)
 [![SJTUTeX](https://img.shields.io/github/v/release/sjtug/SJTUTeX?label=SJTUTeX)](https://github.com/sjtug/SJTUTeX) 
 [![Join Discussions](https://img.shields.io/github/discussions/sjtug/SJTUThesis)](https://github.com/sjtug/SJTUThesis/discussions)
