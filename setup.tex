@@ -12,9 +12,9 @@
   %
   info = {%
     %
-    % 标题
+    % 标题标标标标标标标标标标标标标标标题题题题题题题题题题题题题题题题题题
     %
-    zh / title           = {上海交通大学学位论文 \LaTeX{} 模板示例文档},
+    zh / title           = {\LaTeX{} 模板示例文档},
     en / title           = {A Sample Document for \LaTeX-based SJTU Thesis Template},
     %
     % 标题页标题
@@ -23,15 +23,14 @@
     % zh / display-title   = {上海交通大学学位论文\\ \LaTeX{} 模板示例文档},
     % en / display-title   = {A Sample Document \\ for \LaTeX-based SJTU Thesis Template},
     %
-    % 关键词
-    %
+    % 关键词关键词关键词关键词关键词关键词关键词关键词关键词关键词关键词关键词关键词关键词
     zh / keywords        = {上海交大, 饮水思源, 爱国荣校},
-    en / keywords        = {SJTU, master thesis, XeTeX/LaTeX template},
+    en / keywords        = {SJTU, Major aster thesis, XeTeX/LaTeX template},
     %
-    % 姓名
+    % 姓名姓名姓名姓名姓名姓名姓名姓名姓名姓名姓名姓名姓名姓名姓名姓名姓名姓名姓名姓名姓名姓名
     %
-    zh / author          = {某\quad{}某},
-    en / author          = {Mo Mo},
+    zh / author          = {娄\quad{}金\quad{}尚},
+    en / author          = {Lou~jin~shang},
     %
     % 指导教师
     %
@@ -45,22 +44,22 @@
     %
     % 学号
     %
-    id              = {0010900990},
+    id              = {21080140314},
     %
     % 学位
     %   本科生不需要填写
     %
-    zh / degree          = {工学硕士},
-    en / degree          = {Master of Engineering},
+    % zh / degree          = {工学硕士},
+    % en / degree          = {Master of Engineering},
     %
     % 专业
     %
-    zh / major           = {某某专业},
+    zh / major           = {材料科学与工程专业},
     en / major           = {A Very Important Major},
     %
     % 所属院系
     %
-    zh / department      = {某某系},
+    zh / department      = {材料成型及控制工程},
     en / department      = {Depart of XXX},
     %
     % 答辩日期
@@ -88,11 +87,25 @@
   % 风格设置
   %
   style = {%
+  % title-logo-color = black,
+      % 论文标题页 logo 颜色 (red/blue/black)
+},
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%++++%+++++++
     %
-    % 论文标题页 logo 颜色 (red/blue/black)
+    %%    注：：：：如果想要该第一页面校徽logo请直接更换
+    %             texmf\tex\latex\sjtutex\vi\sjtu-vi-badge-red.pdf      %默认宽度7cm  
     %
-    % title-logo-color = black,
-  },
+    %      texmf\tex\latex\sjtutex\sjtu-lang-thesis-zh.def
+    %         %代码如下 
+  %  { logo    }
+  %     {
+  %       content     =
+  %         {
+  %           \includegraphics [ width = 7 cm ]
+  %             { sjtu-vi-badge- \l__sjtu_style_title_logo_color_tl .pdf }
+  %         }
+  %     },
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%？？？？%%%%%%%%%%%%%%%%%%%%%%%%%%%
   %
   % 名称设置
   %
@@ -102,7 +115,6 @@
     % achv            = {攻读学位期间完成的论文},
   },
 }
-
 % 使用 BibLaTeX 处理参考文献
 %   biblatex-gb7714-2015 常用选项
 %     gbnamefmt=lowercase     姓名大小写由输入信息确定
@@ -127,6 +139,11 @@
 
 % 固定宽度的表格
 % \usepackage{tabularx}
+
+\usepackage{titlesec}
+% 主要涉及 titlesec 宏包的使用。章节样式调整使用\titlelabel,
+% \titleformat*命令。前者需要配合计数器使用,后者简单地设置章节标题的
+
 
 % 使用三线表：toprule，midrule，bottomrule。
 \usepackage{booktabs}

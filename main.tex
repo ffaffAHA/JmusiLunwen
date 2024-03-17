@@ -1,7 +1,7 @@
 % !TeX encoding = UTF-8
 
 % 载入 SJTUThesis 模版
-\documentclass[type=master]{sjtuthesis}
+\documentclass[type=bachelor,zihao=5,oneside,openany]{sjtuthesis}
 % 选项
 %   type=[doctor|master|bachelor],     % 可选（默认：master），论文类型
 %   zihao=[-4|5],                      % 可选（默认：-4），正文字号大小
@@ -51,11 +51,13 @@
 \mainmatter
 
 % 正文内容
+\input{contents/first.tex}
 \input{contents/intro}
 \input{contents/math_and_citations}
 \input{contents/floats}
 \input{contents/summary}
-
+% \input{contents/digest.tex}
+% 可以使用\input添加章节树
 %TC:ignore
 
 % 参考文献

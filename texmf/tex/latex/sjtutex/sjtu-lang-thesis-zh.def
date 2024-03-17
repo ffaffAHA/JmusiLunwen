@@ -84,7 +84,7 @@
       {
         content     =
           {
-            \includegraphics [ width = 3 cm ]
+            \includegraphics [ width = 7 cm ]
               { sjtu-vi-badge- \l__sjtu_style_title_logo_color_tl .pdf }
           }
       },

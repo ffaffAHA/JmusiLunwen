@@ -405,8 +405,8 @@
     \group_end:
     \__sjtu_vspace:N \l__sjtu_component_bottom_skip
   }
-\DeclareTemplateInterface { sjtu } { page } { 0 }
-  {
+\DeclareTemplateInterface { sjtu } { page } { 0 }%%%%%%%%设置了两种格式的page
+  {%第一中，页眉为空
     bookmark      : boolean   = false ,
     bookmark-text : tokenlist = \c_empty_tl ,
     style         : tokenlist = empty ,
@@ -419,7 +419,7 @@
 \DeclareTemplateCode { sjtu } { page } { 0 }
   {
     bookmark      = \l__sjtu_page_bookmark_bool ,
-    bookmark-text = \l__sjtu_page_bookmark_text_tl ,
+    bookmark-text = \l__sjtu_page_bookmark_text_tl ,%bookmark_text 来自bookmark-text
     style         = \l__sjtu_page_style_tl ,
     format        = \l__sjtu_page_format_tl ,
     prefix        = \l__sjtu_page_prefix_tl ,
@@ -431,8 +431,8 @@
     \AssignTemplateKeys
     \bool_if:NTF \g__sjtu_openright_bool
       { \cleardoublepage } { \clearpage }
-    \bool_if:NT \l__sjtu_page_bookmark_bool
-      { \__sjtu_pdf_bookmark:nn { 0 } { \l__sjtu_page_bookmark_text_tl } }
+    \bool_if:NT \l__sjtu_page_bookmark_bool%如果设置了书签，会在书签中添加一条指定文本的书签。
+      { \__sjtu_pdf_bookmark:nn { 0 } { \l__sjtu_page_bookmark_text_tl } }%在这里——   bookmark_text
     \exp_args:No \thispagestyle { \l__sjtu_page_style_tl }
     \__sjtu_vspace_r:N \l__sjtu_page_top_skip
     \__sjtu_vspace:n { - \tex_parskip:D      }
@@ -599,12 +599,17 @@
     achv           .tl_set:N = \SJTU@achvname ,
     achv          .initial:n = { List~of~Research~Achievements },
   }
-\clist_map_inline:Nn \g__sjtu_lang_clist
+\clist_map_inline:Nn \g__sjtu_lang_clist%这行代码会遍历名为 \g__sjtu_lang_clist 的 clist（逗号分隔的列表），对每个元素执行 \file_input:n { sjtu-name-thesis- #1 .def }。
   { \file_input:n { sjtu-name-thesis- #1 .def } }
 \clist_map_inline:nn
   { title_page, declaration, abstract }
   { \__sjtu_define_name:nv {#1} { c__sjtu_name_ #1 _ \g__sjtu_lang_tl _tl } }
-\geometry
+
+  % 这行代码会遍历包含元素 title_page、declaration 和 abstract 的列表。
+% 对于每个元素，会调用 \__sjtu_define_name:nv {#1} { c__sjtu_name_ #1 _ \g__sjtu_lang_tl _tl }。
+% \__sjtu_define_name:nv {#1} { c__sjtu_name_ #1 _ \g__sjtu_lang_tl _tl } 的作用是定义一个名为 #1 的命令，其值为 c__sjtu_name_ #1 _ \g__sjtu_lang_tl _tl，其中 \g__sjtu_lang_tl 是语言变量的值。
+
+\geometry%页面布局
   {
     top           = 3.5 cm,
     bottom        = 4.0 cm,
@@ -624,9 +629,11 @@
     header-font .initial:n = \zihao { -5 } ,
     footer-font  .tl_set:N = \l__sjtu_style_footer_font_tl ,
     footer-font .initial:n = \zihao { -5 }
-  }
+  }%页眉和页脚字体
 \fancyheadinit { \l__sjtu_style_header_font_tl }
+%%页头
 \fancyfootinit { \l__sjtu_style_footer_font_tl }
+%%页脚
 \keys_define:nn { sjtu / style }
   {
     header-uppercase       .choice: ,
@@ -651,9 +658,9 @@
       \l__sjtu_info_subject_zh_tl
     }
   }
-\tl_set:Nn \l__sjtu_leftmark_tl  { \leftmark }
+\tl_set:Nn \l__sjtu_leftmark_tl  { \leftmark }%右上角的文字leftmark定义是取\chapter*{title}
 \tl_set:Nn \l__sjtu_rightmark_tl { \leftmark }
-\bool_if:NTF \g__sjtu_twoside_bool
+\bool_if:NTF \g__sjtu_twoside_bool%这段代码根据文档是否双面打印来设置页面页眉的内容。
   {
     \fancyhead [ LO, RE ] { \l__sjtu_header_tl }
     \fancyhead [ LE ]     { \__sjtu_nouppercase:V \l__sjtu_leftmark_tl  }
@@ -666,11 +673,18 @@
 \fancyfoot [ C ] { \__sjtu_page:n { \__sjtu_thepage: } }
 \cs_set:Npn \headrule
   {
+    % 这条命令创建一个水平的直线，高度为2.25点，
+    % 宽度与页面宽度相同（\headwidth 为一个已经定义好的长度变量）。
     \hrule height 2.25 pt width \headwidth
-    \skip_vertical:n {  0.75 pt }
-    \hrule height 0.75 pt width \headwidth
-    \skip_vertical:n { -3.75 pt }
+%
+    % 这条命令使当前位置向下移动0.75点，相当于增加一定数量的垂直空白。
+    % \skip_vertical:n {  0.75 pt }
+    % \hrule height 0.75 pt width \headwidth
+    % \skip_vertical:n { -3.75 pt }
   }
+  % 页眉这段代码定义了一个名为 \headrule 的控制序列，
+  % 其作用是在页面上绘制两条水平线，中间夹杂着一定数量的垂直空白。
+  % 这种操作通常用于自定义页眉（header）的样式
 \cs_new_eq:NN \ps@SJTU@null \prg_do_nothing:
 \RenewDocumentCommand \cleardoublepage { }
   {
@@ -681,6 +695,8 @@
           { \hbox:n { } \thispagestyle { empty } \newpage }
       }
   }
+% 这段代码重新定义了LaTeX中的\cleardoublepage命令， 当双面打印启用时，如果当前页面不是奇数页，则插入一个空白页并将样式设置为空白样式。这有助于确保在双面打印时每个章节都从奇数页开始。
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  妙啊    %%%%%%%%%%%%%%%%%%%%%%%
 \pagenumbering { Alph }
 \RenewDocumentCommand \frontmatter { }
   {
@@ -688,6 +704,7 @@
     \@mainmatterfalse
     \pagenumbering { Roman }
   }
+% 一下是设置的章节，一级标题，二级标题
 \ctex_set:nn { chapter }
   {
     pagestyle   = SJTU@null ,
@@ -696,7 +713,8 @@
     afterskip   = 18 bp ,
     lofskip     = \c_zero_skip ,
     lotskip     = \c_zero_skip ,
-    format      = \zihao { 3 } \bfseries \CJKsffamily \centering ,
+    % format      = \zihao { 3 } \bfseries \CJKsffamily \centering ,%上海交通大学格式
+    format      = \zihao { 2 } \heiti \CJKsffamily \centering ,%佳大格式
     nameformat  = ,
     titleformat = ,
     aftername   = \quad ,
@@ -706,23 +724,27 @@
   {
     beforeskip  = 24 bp ,
     afterskip   =  6 bp ,
-    format      = \zihao { 4 } \bfseries \CJKsffamily ,
+    % format      = \zihao { 4 } \bfseries \CJKsffamily ,%上海交大
+    format      = \zihao { 4 } \heiti \CJKsffamily ,%佳大% 四号、黑体
     afterindent = true
   }
 \ctex_set:nn { subsection }
   {
     beforeskip  = 12 bp ,
     afterskip   =  6 bp ,
-    format      = \zihao { -4 } \bfseries \CJKsffamily ,
+    % format      = \zihao { -4 } \bfseries \CJKsffamily ,%上海交大
+    format      = \zihao { 5 } \bfseries\songti \CJKsffamily ,%佳大 % 五号，宋体，加粗
     afterindent = true
   }
 \ctex_set:nn { subsubsection }
   {
     beforeskip  =  6 bp ,
     afterskip   =  6 bp ,
-    format      = \zihao { -4 } \normalfont ,
+    % format      = \zihao { 5 } \normalfont ,
+    format      = \zihao { 5 } \bfseries\songti \CJKsffamily ,%佳大 % 五号，宋体，加粗
     afterindent = true
   }
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \ctex_set:nn { paragraph }
   { afterindent = true }
 \ctex_set:nn { subparagraph }
@@ -767,14 +789,16 @@
   }
 \ctex_patch_cmd:Nnn \@floatboxreset
   { \normalsize } { \SJTU@style@float@font }
-\keys_define:nn { sjtu / style }
+\keys_define:nn { sjtu / style }%插入的图片格式
   {
     caption-font       .code:n =
       { \DeclareCaptionFont { SJTU@font     } {#1} } ,
-    caption-font    .initial:n = \zihao { 5 } \bfseries ,
+    % caption-font    .initial:n = \zihao { 5 } \bfseries ,
+    caption-font    .initial:n = \zihao { -5 } \songti ,
+
     subcaption-font    .code:n =
       { \DeclareCaptionFont { SJTU@sub@font } {#1} } ,
-    subcaption-font .initial:n = \zihao { 5 } \normalfont
+    subcaption-font .initial:n = \zihao { -5 } \normalfont
   }
 \DeclareCaptionLabelSeparator { enskip } { \enskip }
 \captionsetup
@@ -1094,7 +1118,7 @@
     \parbox [ t ] { 12 em }
       { #1 \c__sjtu_signature_text_zh_tl }
   }
-\clist_map_inline:nn
+\clist_map_inline:nn%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
   {
     { orig / title }
       {
@@ -1158,13 +1182,14 @@
         align       = normal
       }
   }
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   {
     \__sjtu_declare_component:nnn { copyright } #1
   }
 \__sjtu_declare_page:nn { copyright }
   {
     bookmark      = true ,
-    bookmark-text = \c__sjtu_name_declaration_tl ,
+    bookmark-text = \c__sjtu_name_declaration_tl ,%bookmark-text来自这——declaration
     format        = \linespread { 1 } \__sjtu_set_language_zh: ,
     prefix        = copyright ,
     components    =
@@ -1205,7 +1230,11 @@
     \__sjtu_if_lang_valid:nTF {#1}
       {
         \use:c { __sjtu_set_language_ #1 : }
-        \ctex_set:nn { chapter } { format += \sffamily }
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   设置 摘 要  二字  %%%%%%%%%%%%%%%
+        \ctex_set:nn { chapter } { format += \zihao { 2 } \heiti }
+        % 
+        \zihao {-5} \fangsong%%%%%%%%%%% 设置bool_if中文摘要内容的字体
+        % 
         \bool_if:NTF \l__sjtu_abstract_bookmark_bool
           {
             \__sjtu_head_auxa_s:xn
@@ -1229,10 +1258,15 @@
           {
             \par \mode_leave_vertical: \par \noindent
             {
-              \bfseries
+              \zihao { -5 } \heiti
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%      keywords关键词字体设计
               \tl_use:c { c__sjtu_name_keywords_ #1 _tl }
+
+              % \zihao { -5 } \fangsong
+              %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   逗号的样式
               \tl_use:c { c__sjtu_name_info_sep_ #1 _tl }
             }
+            \zihao { -5 } \fangsong
             \clist_use:cv { l__sjtu_info_keywords_ #1 _clist }
               { c__sjtu_name_item_sep_ #1 _tl }
           }
@@ -1246,6 +1280,7 @@
     \__sjtu_head_aux_s:n { \contentsname }
     \@starttoc { toc }
   }
+  % 这段代码主要是为了定义抽象环境和生成目录的命令。
 \NewDocumentCommand \SJTU@listof { m m s }
   {
     \IfBooleanTF {#3}
@@ -1468,7 +1503,7 @@
     display-date      .meta:n = { zh / date             = {#1} } ,
     display-date*     .meta:n = { en / date             = {#1} }
   }
-\keys_define:nn { sjtu / name }
+\keys_define:nn { sjtu / name }%这段代码的作用是定义了一系列关于名字的选项，每个选项都有对应的元数据，可以用来存储不同类型的信息。例如，对于 abbreviation 选项，可以存储缩写的信息，对于 acknowledgements 选项，可以存储致谢的信息等。
   {
     abbreviation      .meta:n = { abbr  = {#1} } ,
     nomenclature      .meta:n = { nom   = {#1} } ,
@@ -1476,7 +1511,7 @@
     publications      .meta:n = { achv  = {#1} } ,
     achievements      .meta:n = { achv  = {#1} }
   }
-\ctex_at_end_package:nn { hyperref }
+\ctex_at_end_package:nn { hyperref }%这段代码主要是设置 hyperref 宏包的参数，使得生成的 PDF 文件具有良好的书签和链接功能，并且设置了一些 PDF 元数据信息。
   {
     \hypersetup
       {
@@ -1506,7 +1541,7 @@
         \cs_set_eq:NN \qquad   \c_empty_tl
         \cs_set_eq:NN \hspace  \use_none:n
       }
-    \ctex_after_end_preamble:n
+    \ctex_after_end_preamble:n%这段代码的作用是在 LaTeX 的导言部分之后设置 PDF 文件的元数据，包括标题、作者、主题和关键词。
       {
         \hypersetup
           {
@@ -1516,7 +1551,7 @@
             pdfkeywords = \l__sjtu_info_keywords_zh_clist
           }
       }
-  }
+  }%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \ctex_at_end_package:nn { threeparttable }
   { \tl_put_right:Nn \TPTnoteSettings { \footnotesize } }
 \ctex_at_end_package:nn { longtable }
