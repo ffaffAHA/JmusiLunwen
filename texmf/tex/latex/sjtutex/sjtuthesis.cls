@@ -119,7 +119,9 @@
       {
         \tl_gset:Nn  \g__sjtu_zihao_tl {#1}
         \dim_gset:Nn \g__sjtu_font_size_dim         { 10.5 bp }
-        \dim_gset:Nn \g__sjtu_default_line_skip_dim { 15.6 bp }
+        % \dim_gset:Nn \g__sjtu_default_line_skip_dim { 15.6 bp }
+        \dim_gset:Nn \g__sjtu_default_line_skip_dim { 13.3 bp }
+
       } ,
     zihao .initial:n = { -4 } ,
     lineskip .dim_gset:N = \g__sjtu_line_skip_dim ,
